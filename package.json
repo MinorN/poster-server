@@ -41,6 +41,7 @@
     "@eggjs/tsconfig": "1",
     "@types/mocha": "10",
     "@types/node": "22",
+    "egg-ts-helper": "^3.1.1",
     "eslint": "8",
     "eslint-config-egg": "14",
     "typescript": "5"

@@ -1,0 +1,10 @@
+// This file is created by egg-ts-helper@3.1.1
+// Do not modify this file!!!!!!!!!
+/* eslint-disable */
+
+import 'egg';
+import ExtendApplication from '../../../app/extend/application.js';
+type ExtendApplicationType = typeof ExtendApplication;
+declare module 'egg' {
+  interface Application extends ExtendApplicationType { }
+}

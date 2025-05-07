@@ -8,6 +8,7 @@ export default {
     const that = this as unknown as Application
     return `hello,${that.config.name},${msg}`
   },
+
   get axiosInstance(): AxiosInstance {
     if (!this[AXIOS]) {
       this[AXIOS] = axios.create({
