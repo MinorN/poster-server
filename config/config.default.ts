@@ -20,6 +20,10 @@ export default (appInfo: EggAppInfo) => {
     defaultViewEngine: "nulljucks",
   }
 
+  config.logger = {
+    consoleLevel: "DEBUG",
+  }
+
   // change multipart mode to file
   // @see https://github.com/eggjs/multipart/blob/master/src/config/config.default.ts#L104
   config.multipart = {
