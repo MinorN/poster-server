@@ -30,6 +30,10 @@ export default (appInfo: EggAppInfo) => {
     mode: "file",
   }
 
+  config.mongoose = {
+    url: "mongodb://localhost:27017/poster",
+  }
+
   // add your special config in here
   // Usage: `app.config.bizConfig.sourceUrl`
   const bizConfig = {
@@ -38,7 +42,7 @@ export default (appInfo: EggAppInfo) => {
 
   // the return config will combines to EggAppConfig
   return {
-    ...config,
-    bizConfig,
+    ...(config as {}),
+    ...bizConfig,
   }
 }

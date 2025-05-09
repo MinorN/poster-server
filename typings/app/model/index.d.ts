@@ -3,10 +3,10 @@
 /* eslint-disable */
 
 import 'egg';
-import ExportUserController from '../../../app/controller/UserController.js';
+import ExportUser from '../../../app/model/user.js';
 
 declare module 'egg' {
-  interface IController {
-    userController: ExportUserController;
+  interface IModel {
+    User: ReturnType<typeof ExportUser>;
   }
 }

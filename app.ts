@@ -5,6 +5,7 @@ export default class AppBoot implements IBoot {
   constructor(app: Application) {
     this.app = app
   }
+
   configWillLoad() {
     console.log("coreMiddleware", this.app.config.coreMiddleware)
   }

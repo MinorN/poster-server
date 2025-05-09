@@ -23,6 +23,7 @@ import '@eggjs/tegg-eventbus-plugin';
 import '@eggjs/tegg-aop-plugin';
 import '@eggjs/tracer';
 import 'egg-view-nunjucks';
+import 'egg-mongoose';
 import { EggPluginItem } from 'egg';
 declare module 'egg' {
   interface EggPlugin {
@@ -46,5 +47,6 @@ declare module 'egg' {
     aopModule?: EggPluginItem;
     tracer?: EggPluginItem;
     nulljucks?: EggPluginItem;
+    mongoose?: EggPluginItem;
   }
 }

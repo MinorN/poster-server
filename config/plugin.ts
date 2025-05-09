@@ -1,6 +1,10 @@
 import { EggPlugin } from "egg"
 
 const plugin: EggPlugin = {
+  mongoose: {
+    enable: true,
+    package: "egg-mongoose",
+  },
   tegg: {
     enable: true,
     package: "@eggjs/tegg-plugin",
