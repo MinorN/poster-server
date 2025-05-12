@@ -5,6 +5,10 @@ const plugin: EggPlugin = {
     enable: true,
     package: "egg-mongoose",
   },
+  validate: {
+    enable: true,
+    package: "egg-validate",
+  },
   tegg: {
     enable: true,
     package: "@eggjs/tegg-plugin",

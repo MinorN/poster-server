@@ -1,8 +1,14 @@
 import { Controller } from "egg"
 
+const userCreateRules = {
+  username: "email",
+  password: { type: "password", min: 8 },
+}
+
 export default class UserController extends Controller {
   async createByEmail() {
     const { ctx, service } = this
+    ctx.validate(userCreateRules)
     const userData = await service.user.createByEmail(ctx.request.body)
     ctx.helper.success({ ctx, res: userData })
   }
