@@ -1,5 +1,4 @@
 import { Application } from "egg"
-import { Schema } from "mongoose"
 
 export interface UserProps {
   username: string
@@ -13,6 +12,8 @@ export interface UserProps {
 }
 
 function initUserModel(app: Application) {
+  const mongoose = app.mongoose
+  const Schema = mongoose.Schema
   const userSchema = new Schema<UserProps>(
     {
       username: { type: String, unique: true, required: true },

@@ -31,7 +31,10 @@ export default (appInfo: EggAppInfo) => {
   }
 
   config.mongoose = {
-    url: "mongodb://localhost:27017/poster",
+    client: {
+      url: "mongodb://localhost:27017/poster",
+      options: {},
+    },
   }
 
   // add your special config in here

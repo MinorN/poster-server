@@ -15,6 +15,7 @@ import '@eggjs/schedule';
 import '@eggjs/static';
 import '@eggjs/jsonp';
 import '@eggjs/view';
+import 'egg-mongoose';
 import '@eggjs/tegg-plugin';
 import '@eggjs/tegg-config';
 import '@eggjs/tegg-controller-plugin';
@@ -23,7 +24,6 @@ import '@eggjs/tegg-eventbus-plugin';
 import '@eggjs/tegg-aop-plugin';
 import '@eggjs/tracer';
 import 'egg-view-nunjucks';
-import 'egg-mongoose';
 import { EggPluginItem } from 'egg';
 declare module 'egg' {
   interface EggPlugin {
@@ -39,6 +39,7 @@ declare module 'egg' {
     static?: EggPluginItem;
     jsonp?: EggPluginItem;
     view?: EggPluginItem;
+    mongoose?: EggPluginItem;
     tegg?: EggPluginItem;
     teggConfig?: EggPluginItem;
     teggController?: EggPluginItem;
@@ -47,6 +48,5 @@ declare module 'egg' {
     aopModule?: EggPluginItem;
     tracer?: EggPluginItem;
     nulljucks?: EggPluginItem;
-    mongoose?: EggPluginItem;
   }
 }

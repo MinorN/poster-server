@@ -2,11 +2,11 @@
 // Do not modify this file!!!!!!!!!
 /* eslint-disable */
 
-import 'egg';
-import ExportUserController from '../../../app/controller/UserController.js';
+import "egg"
+import ExportUserController from "../../../app/controller/user.js"
 
-declare module 'egg' {
+declare module "egg" {
   interface IController {
-    userController: ExportUserController;
+    userController: ExportUserController
   }
 }
