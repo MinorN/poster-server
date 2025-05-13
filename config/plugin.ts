@@ -9,6 +9,10 @@ const plugin: EggPlugin = {
     enable: true,
     package: "egg-validate",
   },
+  bcrypt: {
+    enable: true,
+    package: "egg-bcrypt",
+  },
   tegg: {
     enable: true,
     package: "@eggjs/tegg-plugin",

@@ -23,7 +23,16 @@ function initUserModel(app: Application) {
       picture: { type: String },
       phoneNumber: { type: String },
     },
-    { timestamps: true }
+    {
+      timestamps: true,
+      toJSON: {
+        transform: (_doc, ret) => {
+          delete ret.password // 删除密码字段
+          delete ret.__v // 删除版本字段
+          return ret
+        },
+      },
+    }
   )
   return app.mongoose.model<UserProps>("User", userSchema)
 }

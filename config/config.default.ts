@@ -37,6 +37,10 @@ export default (appInfo: EggAppInfo) => {
     },
   }
 
+  config.bcrypt = {
+    saltRounds: 10,
+  }
+
   // add your special config in here
   // Usage: `app.config.bizConfig.sourceUrl`
   const bizConfig = {
