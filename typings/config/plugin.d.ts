@@ -1,21 +1,22 @@
-// This file is created by egg-ts-helper@3.1.1
+// This file is created by egg-ts-helper@2.1.1
 // Do not modify this file!!!!!!!!!
 /* eslint-disable */
 
 import 'egg';
-import '@eggjs/onerror';
-import '@eggjs/session';
-import '@eggjs/i18n';
-import '@eggjs/watcher';
-import '@eggjs/multipart';
-import '@eggjs/security';
-import '@eggjs/development';
-import '@eggjs/logrotator';
-import '@eggjs/schedule';
-import '@eggjs/static';
-import '@eggjs/jsonp';
-import '@eggjs/view';
+import 'egg-onerror';
+import 'egg-session';
+import 'egg-i18n';
+import 'egg-watcher';
+import 'egg-multipart';
+import 'egg-security';
+import 'egg-development';
+import 'egg-logrotator';
+import 'egg-schedule';
+import 'egg-static';
+import 'egg-jsonp';
+import 'egg-view';
 import 'egg-mongoose';
+import 'egg-validate';
 import '@eggjs/tegg-plugin';
 import '@eggjs/tegg-config';
 import '@eggjs/tegg-controller-plugin';
@@ -40,6 +41,7 @@ declare module 'egg' {
     jsonp?: EggPluginItem;
     view?: EggPluginItem;
     mongoose?: EggPluginItem;
+    validate?: EggPluginItem;
     tegg?: EggPluginItem;
     teggConfig?: EggPluginItem;
     teggController?: EggPluginItem;

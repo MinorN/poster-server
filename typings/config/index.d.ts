@@ -1,10 +1,10 @@
-// This file is created by egg-ts-helper@3.1.1
+// This file is created by egg-ts-helper@2.1.1
 // Do not modify this file!!!!!!!!!
 /* eslint-disable */
 
 import 'egg';
 import { EggAppConfig } from 'egg';
-import ExportConfigDefault from '../../config/config.default.js';
+import ExportConfigDefault from '../../config/config.default';
 type ConfigDefault = ReturnType<typeof ExportConfigDefault>;
 type NewEggAppConfig = ConfigDefault;
 declare module 'egg' {

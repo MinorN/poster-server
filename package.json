@@ -4,7 +4,9 @@
   "description": "",
   "private": true,
   "egg": {
-    "typescript": true
+    "typescript": true,
+    "declarations": true,
+    "require": []
   },
   "scripts": {
     "start": "eggctl start --daemon --title=egg-server-poster-server",
@@ -32,7 +34,7 @@
     "@eggjs/tegg-schedule-plugin": "^3.5.2",
     "@eggjs/tracer": "^3.0.0",
     "axios": "^1.9.0",
-    "egg": "^4.0.0",
+    "egg": "^3.30.1",
     "egg-mongoose": "^4.0.1",
     "egg-validate": "^2.0.2",
     "egg-view-nunjucks": "^2.3.0"
@@ -43,6 +45,7 @@
     "@eggjs/tsconfig": "1",
     "@types/mocha": "10",
     "@types/node": "22",
+    "egg-ts-helper": "^2.1.1",
     "eslint": "8",
     "eslint-config-egg": "14",
     "typescript": "5"
