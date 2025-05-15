@@ -18,6 +18,10 @@ export const userErrorMessages = {
     errno: 101003,
     message: "账号名或密码错误",
   },
+  loginValidateFail: {
+    errno: 101004,
+    message: "登录失败",
+  },
 }
 
 export default class UserController extends Controller {
@@ -75,20 +79,33 @@ export default class UserController extends Controller {
         errorType: "loginError",
       })
     }
+    const token = ctx.app.jwt.sign(
+      { username: user.username },
+      ctx.app.config.secret,
+      {
+        expiresIn: 60 * 60,
+      }
+    )
     // 登录成功
-    const userObj = user.toJSON()
     ctx.helper.success({
       ctx,
-      res: userObj,
+      res: { token },
       msg: "登录成功",
     })
   }
 
   async show() {
     const { ctx, service } = this
-    if (ctx.params && ctx.params.id) {
-      const userData = await service.user.findById(ctx.params.id)
-      ctx.helper.success({ ctx, res: userData })
+    const userData = await service.user.findByUsername(ctx.state.user.username)
+    if (!userData) {
+      return ctx.helper.error({
+        ctx,
+        errorType: "loginValidateFail",
+      })
     }
+    ctx.helper.success({
+      ctx,
+      res: userData.toJSON(),
+    })
   }
 }

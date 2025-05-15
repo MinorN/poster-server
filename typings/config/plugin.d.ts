@@ -17,6 +17,7 @@ import 'egg-jsonp';
 import 'egg-view';
 import 'egg-mongoose';
 import 'egg-validate';
+import 'egg-jwt';
 import 'egg-bcrypt';
 import '@eggjs/tegg-plugin';
 import '@eggjs/tegg-config';
@@ -43,6 +44,7 @@ declare module 'egg' {
     view?: EggPluginItem;
     mongoose?: EggPluginItem;
     validate?: EggPluginItem;
+    jwt?: EggPluginItem;
     bcrypt?: EggPluginItem;
     tegg?: EggPluginItem;
     teggConfig?: EggPluginItem;

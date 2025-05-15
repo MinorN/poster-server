@@ -31,14 +31,14 @@ export default (appInfo: EggAppInfo) => {
   }
 
   config.mongoose = {
-    client: {
-      url: "mongodb://localhost:27017/poster",
-      options: {},
-    },
+    url: "mongodb://localhost:27017/poster",
   }
 
   config.bcrypt = {
     saltRounds: 10,
+  }
+  config.jwt = {
+    secret: "1234567890",
   }
 
   // add your special config in here
