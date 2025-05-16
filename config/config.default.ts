@@ -1,4 +1,7 @@
 import { EggAppConfig, EggAppInfo, PowerPartial } from "egg"
+import dotEnv from "dotenv"
+
+dotEnv.config()
 
 export default (appInfo: EggAppInfo) => {
   const config = {} as PowerPartial<EggAppConfig>
