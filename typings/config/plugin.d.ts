@@ -17,6 +17,7 @@ import 'egg-jsonp';
 import 'egg-view';
 import 'egg-mongoose';
 import 'egg-validate';
+import 'egg-cors';
 import 'egg-jwt';
 import 'egg-redis';
 import 'egg-bcrypt';
@@ -45,6 +46,7 @@ declare module 'egg' {
     view?: EggPluginItem;
     mongoose?: EggPluginItem;
     validate?: EggPluginItem;
+    cors?: EggPluginItem;
     jwt?: EggPluginItem;
     redis?: EggPluginItem;
     bcrypt?: EggPluginItem;

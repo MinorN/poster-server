@@ -1,5 +1,5 @@
 import { Application } from "egg"
-import { ObjectId } from "mongoose"
+import { Types } from "mongoose"
 import AutoIncrementFactory from "mongoose-sequence"
 
 export interface WorkProps {
@@ -15,7 +15,7 @@ export interface WorkProps {
   author: string
   copiedCount: number
   status?: 0 | 1 | 2
-  user: ObjectId
+  user: Types.ObjectId
 }
 
 function initWorkModel(app: Application) {

@@ -10,4 +10,6 @@ export default (app: Application) => {
   router.post("/api/users/loginByPhoneNumber", controller.user.loginByCellphone)
   router.get("/api/users/passport/gitee", controller.user.oauth)
   router.get("/api/users/passport/calback", controller.user.oauthByGitee)
+
+  router.post("/api/works/create", app.jwt as any, controller.work.createWork)
 }

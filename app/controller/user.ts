@@ -129,7 +129,7 @@ export default class UserController extends Controller {
       })
     }
     const token = ctx.app.jwt.sign(
-      { username: user.username },
+      { username: user.username, _id: user._id },
       ctx.app.config.secret,
       {
         expiresIn: 60 * 60,

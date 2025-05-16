@@ -37,6 +37,7 @@ export default class UserService extends Service {
       const token = this.app.jwt.sign(
         {
           username: user.username,
+          _id: user._id,
         },
         this.app.config.jwt.secret
       )
@@ -53,6 +54,7 @@ export default class UserService extends Service {
     const token = this.app.jwt.sign(
       {
         username: newUser.username,
+        _id: newUser._id,
       },
       this.app.config.jwt.secret
     )
@@ -103,6 +105,7 @@ export default class UserService extends Service {
       const token = this.app.jwt.sign(
         {
           username: existUser.username,
+          _id: existUser._id,
         },
         this.app.config.jwt.secret
       )
@@ -121,6 +124,7 @@ export default class UserService extends Service {
     const token = this.app.jwt.sign(
       {
         username: newUser.username,
+        _id: newUser._id,
       },
       this.app.config.jwt.secret
     )
