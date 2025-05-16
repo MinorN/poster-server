@@ -1,6 +1,14 @@
 import { Service } from "egg"
 import { UserProps } from "../model/user"
 
+interface GiteeUserResp {
+  id: number
+  login: string
+  name: string
+  avatar_url: string
+  email: string
+}
+
 export default class UserService extends Service {
   public async createByEmail(payload: UserProps) {
     const { ctx } = this
@@ -51,6 +59,7 @@ export default class UserService extends Service {
     return token
   }
 
+  // 获取 gitee access token
   async getAccessToken(code: string) {
     const { ctx } = this
     const { cid, secret, auth_url, redirect_url } =
@@ -66,6 +75,55 @@ export default class UserService extends Service {
         client_secret: secret,
       },
     })
+    return data.access_token
+  }
+
+  // 获取 gitee user data
+  async getGiteeUserData(access_token: string): Promise<GiteeUserResp> {
+    const { ctx } = this
+    const { giteeUserAPI } = ctx.app.config.giteeOauthConfig
+    const { data } = await ctx.curl<GiteeUserResp>(
+      `${giteeUserAPI}?access_token=${access_token}`,
+      {
+        dataType: "json",
+      }
+    )
     return data
+  }
+
+  async loginByGitee(code: string) {
+    const access_token = await this.getAccessToken(code)
+    const user = await this.getGiteeUserData(access_token)
+    // 检查用户是否存在
+    const { id, name, avatar_url, email } = user
+    const stringId = id.toString()
+    const existUser = await this.findByUsername(`gitee-${stringId}`)
+    // 存在用户
+    if (existUser) {
+      const token = this.app.jwt.sign(
+        {
+          username: existUser.username,
+        },
+        this.app.config.jwt.secret
+      )
+      return token
+    }
+    const userCreatedData: Partial<UserProps> = {
+      oauthID: stringId,
+      provider: "gitee",
+      username: `gitee-${stringId}`,
+      email,
+      picture: avatar_url,
+      nickname: name,
+      type: "oauth",
+    }
+    const newUser = await this.ctx.model.User.create(userCreatedData)
+    const token = this.app.jwt.sign(
+      {
+        username: newUser.username,
+      },
+      this.app.config.jwt.secret
+    )
+    return token
   }
 }

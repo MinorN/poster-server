@@ -42,6 +42,10 @@ export const userErrorMessages = {
     errno: 101007,
     message: "验证码错误",
   },
+  giteeFail: {
+    errno: 101008,
+    message: "gitee授权失败",
+  },
 }
 
 export default class UserController extends Controller {
@@ -173,11 +177,16 @@ export default class UserController extends Controller {
   async oauthByGitee() {
     const { ctx } = this
     const { code } = ctx.request.query
-    const resp = await ctx.service.user.getAccessToken(code)
-    if (resp) {
+    try {
+      const token = await ctx.service.user.loginByGitee(code)
       return ctx.helper.success({
         ctx,
-        res: resp,
+        res: { token },
+      })
+    } catch (e) {
+      return ctx.helper.error({
+        ctx,
+        errorType: "giteeFail",
       })
     }
   }

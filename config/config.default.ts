@@ -59,6 +59,7 @@ export default (appInfo: EggAppInfo) => {
     secret: process.env.GITEE_SECRET,
     redirect_url: "http://localhost:7001/api/users/passport/calback",
     auth_url: "https://gitee.com/oauth/token?grant_type=authorization_code",
+    giteeUserAPI: "https://gitee.com/api/v5/user",
   }
 
   // add your special config in here
