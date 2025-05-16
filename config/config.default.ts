@@ -53,10 +53,19 @@ export default (appInfo: EggAppInfo) => {
     secret: "1234567890",
   }
 
+  // gitee oauth
+  const giteeOauthConfig = {
+    cid: process.env.GITEE_CID,
+    secret: process.env.GITEE_SECRET,
+    redirect_url: "http://localhost:7001/api/users/passport/calback",
+    auth_url: "https://gitee.com/oauth/token?grant_type=authorization_code",
+  }
+
   // add your special config in here
   // Usage: `app.config.bizConfig.sourceUrl`
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,
+    giteeOauthConfig,
   }
 
   // the return config will combines to EggAppConfig

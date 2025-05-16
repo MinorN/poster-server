@@ -8,4 +8,6 @@ export default (app: Application) => {
   router.get("/api/users/current", app.jwt as any, controller.user.show)
   router.post("/api/users/genVeriCode", controller.user.sendVerifyCode)
   router.post("/api/users/loginByPhoneNumber", controller.user.loginByCellphone)
+  router.get("/api/users/passport/gitee", controller.user.oauth)
+  router.get("/api/users/passport/calback", controller.user.oauthByGitee)
 }

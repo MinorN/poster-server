@@ -162,6 +162,26 @@ export default class UserController extends Controller {
     ctx.helper.success({ ctx, res: { token } })
   }
 
+  async oauth() {
+    const { ctx } = this
+    const { cid, redirect_url } = ctx.app.config.giteeOauthConfig
+    ctx.redirect(
+      `https://gitee.com/oauth/authorize?client_id=${cid}&redirect_uri=${redirect_url}&response_type=code`
+    )
+  }
+
+  async oauthByGitee() {
+    const { ctx } = this
+    const { code } = ctx.request.query
+    const resp = await ctx.service.user.getAccessToken(code)
+    if (resp) {
+      return ctx.helper.success({
+        ctx,
+        res: resp,
+      })
+    }
+  }
+
   async show() {
     const { ctx, service } = this
     const userData = await service.user.findByUsername(ctx.state.user.username)
