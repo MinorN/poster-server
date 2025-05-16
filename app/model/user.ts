@@ -10,6 +10,7 @@ export interface UserProps {
   phoneNumber?: string
   createdAt: Date
   updatedAt: Date
+  type: "email" | "cellphone"
 }
 
 function initUserModel(app: Application) {
@@ -19,11 +20,12 @@ function initUserModel(app: Application) {
   const UserSchema = new Schema<UserProps>(
     {
       username: { type: String, unique: true, required: true },
-      password: { type: String, required: true },
+      password: { type: String },
       email: { type: String },
       nickname: { type: String },
       picture: { type: String },
       phoneNumber: { type: String },
+      type: { type: String, default: "email" },
     },
     {
       timestamps: true,

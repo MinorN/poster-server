@@ -23,4 +23,31 @@ export default class UserService extends Service {
       username,
     })
   }
+  async loginByCellphone(cellphone: string) {
+    const user = await this.findByUsername(cellphone)
+    if (user) {
+      const token = this.app.jwt.sign(
+        {
+          username: user.username,
+        },
+        this.app.config.jwt.secret
+      )
+      return token
+    }
+    // 新建用户
+    const userCreatedData: Partial<UserProps> = {
+      username: cellphone,
+      phoneNumber: cellphone,
+      nickname: `poster${cellphone.slice(-4)}`,
+      type: "cellphone",
+    }
+    const newUser = await this.ctx.model.User.create(userCreatedData)
+    const token = this.app.jwt.sign(
+      {
+        username: newUser.username,
+      },
+      this.app.config.jwt.secret
+    )
+    return token
+  }
 }

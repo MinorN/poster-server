@@ -18,6 +18,7 @@ import 'egg-view';
 import 'egg-mongoose';
 import 'egg-validate';
 import 'egg-jwt';
+import 'egg-redis';
 import 'egg-bcrypt';
 import '@eggjs/tegg-plugin';
 import '@eggjs/tegg-config';
@@ -45,6 +46,7 @@ declare module 'egg' {
     mongoose?: EggPluginItem;
     validate?: EggPluginItem;
     jwt?: EggPluginItem;
+    redis?: EggPluginItem;
     bcrypt?: EggPluginItem;
     tegg?: EggPluginItem;
     teggConfig?: EggPluginItem;
