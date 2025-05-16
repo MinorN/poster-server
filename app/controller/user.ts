@@ -174,15 +174,17 @@ export default class UserController extends Controller {
     )
   }
 
+  // 通过 gitee 登录
   async oauthByGitee() {
     const { ctx } = this
     const { code } = ctx.request.query
     try {
       const token = await ctx.service.user.loginByGitee(code)
-      return ctx.helper.success({
-        ctx,
-        res: { token },
-      })
+      await ctx.render("success.nj", { token })
+      // return ctx.helper.success({
+      //   ctx,
+      //   res: { token },
+      // })
     } catch (e) {
       return ctx.helper.error({
         ctx,

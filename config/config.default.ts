@@ -52,6 +52,10 @@ export default (appInfo: EggAppInfo) => {
   config.jwt = {
     secret: "1234567890",
   }
+  config.cors = {
+    origin: "http://localhost:8080",
+    allowMethods: "GET,HEAD,PUT,OPTIONS,POST,DELETE,PATCH",
+  }
 
   // gitee oauth
   const giteeOauthConfig = {
