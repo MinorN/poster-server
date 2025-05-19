@@ -13,6 +13,7 @@ logs/
 *.js
 .egg
 .eslintcache
+uploads
 
 app/**/*.js
 test/**/*.js

@@ -1,5 +1,6 @@
 import { EggAppConfig, EggAppInfo, PowerPartial } from "egg"
 import dotEnv from "dotenv"
+import { join } from "path"
 
 dotEnv.config()
 
@@ -57,6 +58,18 @@ export default (appInfo: EggAppInfo) => {
     allowMethods: "GET,HEAD,PUT,OPTIONS,POST,DELETE,PATCH",
   }
 
+  config.multipart = {
+    mode: "file",
+    tmpdir: join(appInfo.baseDir, "uploads"),
+  }
+
+  config.static = {
+    dir: [
+      { prefix: "/public", dir: join(appInfo.baseDir, "app/public") },
+      { prefix: "/uploads", dir: join(appInfo.baseDir, "uploads") },
+    ],
+  }
+
   // gitee oauth
   const giteeOauthConfig = {
     cid: process.env.GITEE_CID,
@@ -70,6 +83,7 @@ export default (appInfo: EggAppInfo) => {
   // Usage: `app.config.bizConfig.sourceUrl`
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,
+    baseUrl: "http://localhost:7001",
     giteeOauthConfig,
     H5BaseUrl: "http://localhost:7001/api/pages",
   }
