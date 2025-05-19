@@ -1,5 +1,6 @@
 import { Controller } from "egg"
 import validateInput from "app/decorator/inputValidate"
+import checkPermission from "app/decorator/checkPermission"
 
 const wortCreateRules = {
   title: "string",
@@ -59,26 +60,11 @@ export default class WorkController extends Controller {
     ctx.helper.success({ ctx, res })
   }
 
-  // 检查是否是自己的作品
-  async checkPermission(id: number) {
-    const { ctx } = this
-    const userId = ctx.state.user._id
-    const work = await ctx.model.Work.findOne({
-      id,
-    })
-    if (!work) {
-      return false
-    }
-    return work.user.toString() === userId
-  }
   // 更新
+  @checkPermission("Work", "workNoPermissionFail")
   async update() {
     const { ctx } = this
     const { id } = ctx.params
-    const permission = await this.checkPermission(id)
-    if (!permission) {
-      return ctx.helper.error({ ctx, errorType: "workNoPermissionFail" })
-    }
     const payload = ctx.request.body
     const res = await ctx.model.Work.findOneAndUpdate({ id }, payload, {
       new: true,
@@ -87,16 +73,32 @@ export default class WorkController extends Controller {
   }
 
   // 删除
+  @checkPermission("Work", "workNoPermissionFail")
   async delete() {
     const { ctx } = this
     const { id } = ctx.params
-    const permission = await this.checkPermission(id)
-    if (!permission) {
-      return ctx.helper.error({ ctx, errorType: "workNoPermissionFail" })
-    }
     const res = await ctx.model.Work.findOneAndDelete({ id })
       .select("_id id title")
       .lean()
     ctx.helper.success({ ctx, res })
+  }
+
+  // 发布
+  @checkPermission("Work", "workNoPermissionFail")
+  async publish(isTemplate: boolean) {
+    const { ctx, service } = this
+    const { id } = ctx.params
+    const url = await service.work.publish(id, isTemplate)
+    if (!url) {
+      return ctx.helper.error({ ctx, errorType: "workNotFound" })
+    }
+    ctx.helper.success({ ctx, res: { url } })
+  }
+
+  async publishWork() {
+    await this.publish(false)
+  }
+  async publishTemplate() {
+    await this.publish(true)
   }
 }

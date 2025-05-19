@@ -71,6 +71,7 @@ export default (appInfo: EggAppInfo) => {
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,
     giteeOauthConfig,
+    H5BaseUrl: "http://localhost:7001/api/pages",
   }
 
   // the return config will combines to EggAppConfig

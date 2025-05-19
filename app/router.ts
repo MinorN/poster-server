@@ -17,4 +17,15 @@ export default (app: Application) => {
 
   router.patch("/api/works/:id", app.jwt as any, controller.work.update)
   router.delete("/api/works/:id", app.jwt as any, controller.work.delete)
+
+  router.post(
+    "/api/works/publish/:id",
+    app.jwt as any,
+    controller.work.publishWork
+  )
+  router.post(
+    "/api/works/publish-template/:id",
+    app.jwt as any,
+    controller.work.publishTemplate
+  )
 }

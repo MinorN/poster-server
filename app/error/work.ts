@@ -7,4 +7,8 @@ export const workErrorMessages = {
     errno: 102002,
     message: "没有操作权限",
   },
+  workNotFound: {
+    errno: 102003,
+    message: "作品不存在",
+  },
 }
