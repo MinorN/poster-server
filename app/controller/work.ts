@@ -43,7 +43,7 @@ export default class WorkController extends Controller {
     ctx.helper.success({ ctx, res })
   }
 
-  // 查询自己的模板
+  // 查询模板
   async templateList() {
     const { ctx, service } = this
     const { pageIndex, pageSize } = ctx.query
@@ -56,6 +56,47 @@ export default class WorkController extends Controller {
       ...(pageSize && { pageSize: parseInt(pageSize) }),
     }
     const res = await service.work.getList(listCondition)
+    ctx.helper.success({ ctx, res })
+  }
+
+  // 检查是否是自己的作品
+  async checkPermission(id: number) {
+    const { ctx } = this
+    const userId = ctx.state.user._id
+    const work = await ctx.model.Work.findOne({
+      id,
+    })
+    if (!work) {
+      return false
+    }
+    return work.user.toString() === userId
+  }
+  // 更新
+  async update() {
+    const { ctx } = this
+    const { id } = ctx.params
+    const permission = await this.checkPermission(id)
+    if (!permission) {
+      return ctx.helper.error({ ctx, errorType: "workNoPermissionFail" })
+    }
+    const payload = ctx.request.body
+    const res = await ctx.model.Work.findOneAndUpdate({ id }, payload, {
+      new: true,
+    }).lean()
+    ctx.helper.success({ ctx, res })
+  }
+
+  // 删除
+  async delete() {
+    const { ctx } = this
+    const { id } = ctx.params
+    const permission = await this.checkPermission(id)
+    if (!permission) {
+      return ctx.helper.error({ ctx, errorType: "workNoPermissionFail" })
+    }
+    const res = await ctx.model.Work.findOneAndDelete({ id })
+      .select("_id id title")
+      .lean()
     ctx.helper.success({ ctx, res })
   }
 }
