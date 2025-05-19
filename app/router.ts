@@ -12,4 +12,6 @@ export default (app: Application) => {
   router.get("/api/users/passport/calback", controller.user.oauthByGitee)
 
   router.post("/api/works/create", app.jwt as any, controller.work.createWork)
+  router.get("/api/works", app.jwt as any, controller.work.myList)
+  router.get("/api/templates", app.jwt as any, controller.work.myList)
 }
