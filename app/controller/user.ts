@@ -1,4 +1,5 @@
 import { Controller } from "egg"
+import validateInput from "app/decorator/inputValidate"
 
 const userCreateRules = {
   username: "email",
@@ -14,16 +15,9 @@ const sendCodeRules = {
 }
 
 export default class UserController extends Controller {
+  @validateInput(userCreateRules, "createUserValidateFail")
   async createByEmail() {
     const { ctx, service } = this
-    const errors = await this.validateUserInput(userCreateRules)
-    if (errors) {
-      return ctx.helper.error({
-        ctx,
-        errorType: "createUserValidateFail",
-        error: errors,
-      })
-    }
     const user = await service.user.findByUsername(ctx.request.body.username)
     if (user) {
       return ctx.helper.error({
@@ -34,22 +28,10 @@ export default class UserController extends Controller {
     const userData = await service.user.createByEmail(ctx.request.body)
     ctx.helper.success({ ctx, res: userData })
   }
-  async validateUserInput(rules: any) {
-    const { ctx } = this
-    const errors = ctx.app.validator.validate(rules, ctx.request.body)
-    return errors
-  }
 
+  @validateInput(sendCodeRules, "cellphoneValidateFail")
   async sendVerifyCode() {
     const { ctx } = this
-    const errors = await this.validateUserInput(sendCodeRules)
-    if (errors) {
-      return ctx.helper.error({
-        ctx,
-        errorType: "cellphoneValidateFail",
-        error: errors,
-      })
-    }
     const { phoneNumber } = ctx.request.body
     // 获取 redis 数据
     const preVeriCode = await ctx.app.redis.get(`phone-${phoneNumber}`)
@@ -65,17 +47,9 @@ export default class UserController extends Controller {
     ctx.helper.success({ ctx, res: { verifyCode } })
   }
 
+  @validateInput(userCreateRules, "createUserValidateFail")
   async loginByEmail() {
     const { ctx, service } = this
-    // 检查输入
-    const errors = await this.validateUserInput(userCreateRules)
-    if (errors) {
-      return ctx.helper.error({
-        ctx,
-        errorType: "createUserValidateFail",
-        error: errors,
-      })
-    }
     const { username, password } = ctx.request.body
     // 检查用户是否存在
     const user = await service.user.findByUsername(username)
@@ -107,17 +81,9 @@ export default class UserController extends Controller {
       msg: "登录成功",
     })
   }
-
+  @validateInput(sendCodeRules, "cellphoneValidateFail")
   async loginByCellphone() {
     const { ctx } = this
-    const errors = await this.validateUserInput(sendCodeRules)
-    if (errors) {
-      return ctx.helper.error({
-        ctx,
-        errorType: "cellphoneValidateFail",
-        error: errors,
-      })
-    }
     const { phoneNumber, veriCode } = ctx.request.body
     // 检查验证码是否正确
     const preVeriCode = await ctx.app.redis.get(`phone-${phoneNumber}`)
