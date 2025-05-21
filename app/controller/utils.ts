@@ -4,6 +4,7 @@ import sharp from "sharp"
 import { parse } from "path"
 import { nanoid } from "nanoid"
 import { createWriteStream } from "fs"
+import { pipeline } from "stream/promises"
 
 function formatPath(p: string) {
   if (!p) {
@@ -66,22 +67,17 @@ export default class UtilsController extends Controller {
     const writeStream = createWriteStream(savedFilePath)
     const writeThumbnailStream = createWriteStream(savedThumbnailPath)
 
-    const savePromise = new Promise((resolve, reject) => {
-      stream
-        .pipe(writeStream)
-        .on("finish", resolve as any)
-        .on("error", reject)
-    })
+    const savePromise = pipeline(stream, writeStream)
     const transformer = sharp().resize({ width: 300 })
-    const thumbPromise = new Promise((resolve, reject) => {
-      stream
-        .pipe(transformer)
-        .pipe(writeThumbnailStream)
-        .on("finish", resolve as any)
-        .on("error", reject)
-    })
-
-    await Promise.all([savePromise, thumbPromise])
+    const thumbPromise = pipeline(stream, transformer, writeThumbnailStream)
+    try {
+      await Promise.all([savePromise, thumbPromise])
+    } catch (error) {
+      return ctx.helper.error({
+        ctx,
+        errorType: "imageUploadFail",
+      })
+    }
     ctx.helper.success({
       ctx,
       res: {
