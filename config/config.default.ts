@@ -69,6 +69,14 @@ export default (appInfo: EggAppInfo) => {
     ],
   }
 
+  // 腾讯云oss
+  config.oss = {
+    client: {
+      SecretId: process.env.COS_SECRET_ID,
+      SecretKey: process.env.COS_SECRET_KEY,
+    },
+  }
+
   // gitee oauth
   const giteeOauthConfig = {
     cid: process.env.GITEE_CID,

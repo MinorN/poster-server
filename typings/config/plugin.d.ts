@@ -21,6 +21,7 @@ import 'egg-cors';
 import 'egg-jwt';
 import 'egg-redis';
 import 'egg-bcrypt';
+import 'egg-cos';
 import '@eggjs/tegg-plugin';
 import '@eggjs/tegg-config';
 import '@eggjs/tegg-controller-plugin';
@@ -50,6 +51,7 @@ declare module 'egg' {
     jwt?: EggPluginItem;
     redis?: EggPluginItem;
     bcrypt?: EggPluginItem;
+    oss?: EggPluginItem;
     tegg?: EggPluginItem;
     teggConfig?: EggPluginItem;
     teggController?: EggPluginItem;

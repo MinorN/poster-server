@@ -25,6 +25,10 @@ const plugin: EggPlugin = {
     enable: true,
     package: "egg-bcrypt",
   },
+  oss: {
+    enable: true,
+    package: "egg-cos",
+  },
   tegg: {
     enable: true,
     package: "@eggjs/tegg-plugin",
