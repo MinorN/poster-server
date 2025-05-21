@@ -1,7 +1,9 @@
 import { Controller } from "egg"
-import path from "path"
+import path, { join, extname } from "path"
 import sharp from "sharp"
 import { parse } from "path"
+import { nanoid } from "nanoid"
+import { createWriteStream } from "fs"
 
 function formatPath(p: string) {
   if (!p) {
@@ -39,6 +41,52 @@ export default class UtilsController extends Controller {
       ctx,
       res: {
         url,
+      },
+    })
+  }
+
+  pathToURL(path: string) {
+    return path.replace(this.app.config.baseDir, this.app.config.baseUrl)
+  }
+
+  async fileUploadByStream() {
+    const { ctx } = this
+    const stream = await ctx.getFileStream()
+    const uid = nanoid(6)
+    const savedFilePath = join(
+      ctx.app.config.baseDir,
+      "uploads",
+      uid + extname(stream.filename)
+    )
+    const savedThumbnailPath = join(
+      ctx.app.config.baseDir,
+      "uploads",
+      uid + "_thumb" + extname(stream.filename)
+    )
+    const writeStream = createWriteStream(savedFilePath)
+    const writeThumbnailStream = createWriteStream(savedThumbnailPath)
+
+    const savePromise = new Promise((resolve, reject) => {
+      stream
+        .pipe(writeStream)
+        .on("finish", resolve as any)
+        .on("error", reject)
+    })
+    const transformer = sharp().resize({ width: 300 })
+    const thumbPromise = new Promise((resolve, reject) => {
+      stream
+        .pipe(transformer)
+        .pipe(writeThumbnailStream)
+        .on("finish", resolve as any)
+        .on("error", reject)
+    })
+
+    await Promise.all([savePromise, thumbPromise])
+    ctx.helper.success({
+      ctx,
+      res: {
+        url: formatPath(this.pathToURL(savedFilePath)),
+        thumbnailUrl: formatPath(this.pathToURL(savedThumbnailPath)),
       },
     })
   }

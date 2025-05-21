@@ -59,8 +59,7 @@ export default (appInfo: EggAppInfo) => {
   }
 
   config.multipart = {
-    mode: "file",
-    tmpdir: join(appInfo.baseDir, "uploads"),
+    mode: "stream",
   }
 
   config.static = {
