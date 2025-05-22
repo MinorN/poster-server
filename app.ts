@@ -7,6 +7,7 @@ export default class AppBoot implements IBoot {
   }
 
   configWillLoad() {
-    console.log("coreMiddleware", this.app.config.coreMiddleware)
+    // 添加 customerError 中间件 解决jwt的错误
+    this.app.config.coreMiddleware.push("customerError")
   }
 }

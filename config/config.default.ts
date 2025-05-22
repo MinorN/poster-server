@@ -12,7 +12,7 @@ export default (appInfo: EggAppInfo) => {
   config.keys = appInfo.name + "_1746512353104_5399"
 
   // add your egg config in here
-  config.middleware = ["customerError"]
+  // config.middleware = ["customerError"]
 
   config.security = {
     csrf: {
@@ -45,7 +45,14 @@ export default (appInfo: EggAppInfo) => {
     saltRounds: 10,
   }
   config.jwt = {
-    secret: "1234567890",
+    enable: true,
+    secret: process.env.JWT_SECRET || "",
+    match: [
+      "/api/users/getUserInfo",
+      "/api/works",
+      "/api/utils/upload",
+      "/api/utils/mutipleUpload",
+    ],
   }
   config.cors = {
     origin: "http://localhost:8080",
