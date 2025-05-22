@@ -123,8 +123,13 @@ export default class UtilsController extends Controller {
   }
 
   async uploadMutipleFiles() {
-    const { ctx } = this
-    const parts = ctx.multipart()
+    const { ctx, app } = this
+    const { fileSize } = app.config.multipart
+    const parts = ctx.multipart({
+      limits: {
+        fileSize: fileSize as number,
+      },
+    })
     const urls: string[] = []
     let part: FileStream | string[]
     while ((part = await parts())) {
@@ -145,6 +150,18 @@ export default class UtilsController extends Controller {
           })
           const { Location } = result
           urls.push(Location)
+          if (part.truncated) {
+            await cos.deleteObject({
+              Bucket: process.env.COS_BUCKET as string,
+              Region: process.env.COS_REGION as string,
+              Key: filename,
+            })
+            return ctx.helper.error({
+              ctx,
+              errorType: "imageSizeError",
+              error: "文件过大",
+            })
+          }
         } catch (error) {
           await sendToWormhole(part)
           ctx.helper.error({

@@ -12,6 +12,14 @@ export default () => {
           ctx,
           errorType: "loginValidateFail",
         })
+      } else if (ctx.path === "/api/utils/mutipleUpload") {
+        if (error && error.status === 400) {
+          return ctx.helper.error({
+            ctx,
+            errorType: "imageTypeError",
+            error: error.message,
+          })
+        }
       }
       throw error
     }

@@ -28,12 +28,6 @@ export default (appInfo: EggAppInfo) => {
     consoleLevel: "DEBUG",
   }
 
-  // change multipart mode to file
-  // @see https://github.com/eggjs/multipart/blob/master/src/config/config.default.ts#L104
-  config.multipart = {
-    mode: "file",
-  }
-
   config.mongoose = {
     url: "mongodb://localhost:27017/poster",
   }
@@ -60,6 +54,8 @@ export default (appInfo: EggAppInfo) => {
 
   config.multipart = {
     mode: "stream",
+    whitelist: [".png", ".jpg", ".gif", ".webp"],
+    fileSize: "10mb",
   }
 
   config.static = {
