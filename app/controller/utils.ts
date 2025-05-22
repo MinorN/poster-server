@@ -1,4 +1,4 @@
-import { Controller } from "egg"
+import { Controller, type FileStream } from "egg"
 import path, { join, extname } from "path"
 import sharp from "sharp"
 import { parse } from "path"
@@ -120,5 +120,46 @@ export default class UtilsController extends Controller {
         error,
       })
     }
+  }
+
+  async uploadMutipleFiles() {
+    const { ctx } = this
+    const parts = ctx.multipart()
+    const urls: string[] = []
+    let part: FileStream | string[]
+    while ((part = await parts())) {
+      if (Array.isArray(part)) {
+        // 这里不是文件流
+      } else {
+        try {
+          const filename = nanoid(6) + extname(part.filename)
+          const cos = new COS({
+            SecretId: process.env.COS_SECRET_ID,
+            SecretKey: process.env.COS_SECRET_KEY,
+          })
+          const result = await cos.putObject({
+            Bucket: process.env.COS_BUCKET as string,
+            Region: process.env.COS_REGION as string,
+            Key: filename,
+            Body: part,
+          })
+          const { Location } = result
+          urls.push(Location)
+        } catch (error) {
+          await sendToWormhole(part)
+          ctx.helper.error({
+            ctx,
+            errorType: "imageUploadFail",
+            error,
+          })
+        }
+      }
+    }
+    ctx.helper.success({
+      ctx,
+      res: {
+        urls,
+      },
+    })
   }
 }

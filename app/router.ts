@@ -30,4 +30,5 @@ export default (app: Application) => {
   )
 
   router.post("/api/utils/upload", controller.utils.uploadToOSS)
+  router.post("/api/utils/mutipleUpload", controller.utils.uploadMutipleFiles)
 }
