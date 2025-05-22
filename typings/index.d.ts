@@ -12,6 +12,7 @@ declare module "egg" {
     compare(plainText: string, hash: string): Promise<boolean>
     oss: OSS
   }
+  interface Application {}
   interface EggAppConfig {
     bcrypt: {
       saltRounds: number

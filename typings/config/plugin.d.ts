@@ -21,7 +21,7 @@ import 'egg-cors';
 import 'egg-jwt';
 import 'egg-redis';
 import 'egg-bcrypt';
-import 'egg-cos';
+import 'egg-tencent-cloud-cos';
 import '@eggjs/tegg-plugin';
 import '@eggjs/tegg-config';
 import '@eggjs/tegg-controller-plugin';

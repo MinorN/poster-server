@@ -5,6 +5,8 @@ import { parse } from "path"
 import { nanoid } from "nanoid"
 import { createWriteStream } from "fs"
 import { pipeline } from "stream/promises"
+import sendToWormhole from "stream-wormhole"
+import COS from "cos-nodejs-sdk-v5"
 
 function formatPath(p: string) {
   if (!p) {
@@ -85,5 +87,38 @@ export default class UtilsController extends Controller {
         thumbnailUrl: formatPath(this.pathToURL(savedThumbnailPath)),
       },
     })
+  }
+
+  async uploadToOSS() {
+    const { ctx } = this
+    const stream = await ctx.getFileStream()
+    const filename = nanoid(6) + extname(stream.filename)
+    try {
+      const cos = new COS({
+        SecretId: process.env.COS_SECRET_ID,
+        SecretKey: process.env.COS_SECRET_KEY,
+      })
+      const result = await cos.putObject({
+        Bucket: process.env.COS_BUCKET as string,
+        Region: process.env.COS_REGION as string,
+        Key: filename,
+        Body: stream,
+      })
+      const { Location } = result
+      ctx.helper.success({
+        ctx,
+        res: {
+          filename,
+          url: Location,
+        },
+      })
+    } catch (error) {
+      await sendToWormhole(stream)
+      ctx.helper.error({
+        ctx,
+        errorType: "imageUploadFail",
+        error,
+      })
+    }
   }
 }
