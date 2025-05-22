@@ -57,7 +57,7 @@ const plugin: EggPlugin = {
     enable: true,
     package: "@eggjs/tracer",
   },
-  nulljucks: {
+  nunjucks: {
     enable: true,
     package: "egg-view-nunjucks",
   },

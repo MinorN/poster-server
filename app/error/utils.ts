@@ -11,4 +11,12 @@ export const utilsErrorMessages = {
     errno: 103003,
     message: "图片大小超过限制",
   },
+  pageParamsFail: {
+    errno: 103004,
+    message: "页面参数错误",
+  },
+  pageRenderFail: {
+    errno: 103005,
+    message: "页面渲染失败",
+  },
 }

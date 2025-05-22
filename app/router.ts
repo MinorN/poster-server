@@ -24,4 +24,7 @@ export default (app: Application) => {
 
   router.post("/utils/upload", controller.utils.uploadToOSS) // 上传单个文件
   router.post("/utils/mutipleUpload", controller.utils.uploadMutipleFiles) // 上传多个文件
+
+  // ssr
+  router.get("/pages/:idAndUuid", controller.utils.renderH5Page)
 }

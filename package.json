@@ -48,10 +48,12 @@
     "egg-validate": "^2.0.2",
     "egg-view-nunjucks": "^2.3.0",
     "jsonwebtoken": "^9.0.2",
+    "m-poster-component": "^1.1.1",
     "mongoose-sequence": "^5.3.1",
     "nanoid": "^3.3.11",
     "sharp": "^0.29.3",
-    "stream-wormhole": "^2.0.1"
+    "stream-wormhole": "^2.0.1",
+    "vue": "^3.5.14"
   },
   "devDependencies": {
     "@eggjs/bin": "7",

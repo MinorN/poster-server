@@ -21,7 +21,7 @@ export default (appInfo: EggAppInfo) => {
   }
 
   config.view = {
-    defaultViewEngine: "nulljucks",
+    defaultViewEngine: "nunjucks",
   }
 
   config.logger = {

@@ -179,4 +179,37 @@ export default class UtilsController extends Controller {
       },
     })
   }
+
+  splidIdAndUuid(str = "") {
+    const result = { id: "", uuid: "" }
+    if (!str) {
+      return result
+    }
+    const index = str.indexOf("-")
+    if (index < 0) {
+      return result
+    }
+    result.id = str.slice(0, index)
+    result.uuid = str.slice(index + 1)
+    return result
+  }
+
+  async renderH5Page() {
+    const { ctx } = this
+    // id-uuid
+    const { id, uuid } = this.splidIdAndUuid(ctx.params.idAndUuid)
+    try {
+      const pageData = await this.service.utils.renderToPageData({
+        id,
+        uuid,
+      })
+      await ctx.render("page.nj", pageData)
+    } catch (error) {
+      return ctx.helper.error({
+        ctx,
+        errorType: "pageParamsFail",
+        error,
+      })
+    }
+  }
 }
