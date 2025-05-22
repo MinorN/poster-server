@@ -10,7 +10,6 @@ logs/
 .env
 *.swp
 *.lock
-*.js
 .egg
 .eslintcache
 uploads
