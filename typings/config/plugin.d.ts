@@ -59,6 +59,6 @@ declare module 'egg' {
     eventbusModule?: EggPluginItem;
     aopModule?: EggPluginItem;
     tracer?: EggPluginItem;
-    nulljucks?: EggPluginItem;
+    nunjucks?: EggPluginItem;
   }
 }
