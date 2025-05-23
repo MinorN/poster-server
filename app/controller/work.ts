@@ -1,6 +1,7 @@
 import { Controller } from "egg"
 import validateInput from "app/decorator/inputValidate"
 import checkPermission from "app/decorator/checkPermission"
+import { nanoid } from "nanoid"
 
 const wortCreateRules = {
   title: "string",
@@ -13,6 +14,11 @@ export interface IndexCondition {
   populate?: { path: string; select: string }
   customSort?: Record<string, any>
   find?: Record<string, any>
+}
+
+const channelRules = {
+  name: "string",
+  workId: "string",
 }
 
 export default class WorkController extends Controller {
@@ -100,5 +106,77 @@ export default class WorkController extends Controller {
   }
   async publishTemplate() {
     await this.publish(true)
+  }
+
+  @validateInput(channelRules, "workValidateFail")
+  async createChannel() {
+    const { ctx } = this
+    const { name, workId } = ctx.request.body
+    const newChannel = {
+      name,
+      id: nanoid(6),
+    }
+    const res = await ctx.model.Work.findOneAndUpdate(
+      { id: workId },
+      {
+        $push: { channels: newChannel },
+      }
+    )
+    if (!res) {
+      return ctx.helper.error({ ctx, errorType: "workNotFound" })
+    }
+    ctx.helper.success({ ctx, res: newChannel })
+  }
+
+  async getWorkChannel() {
+    const { ctx } = this
+    const { id } = ctx.params
+    const res = await ctx.model.Work.findOne({ id })
+    const channels = res?.channels
+    if (!channels) {
+      return ctx.helper.error({ ctx, errorType: "workNotFound" })
+    }
+    ctx.helper.success({ ctx, res: { count: channels.length, list: channels } })
+  }
+
+  async updateChannelName() {
+    const { ctx } = this
+    const { id } = ctx.params
+    const { name } = ctx.request.body
+    await ctx.model.Work.findOneAndUpdate(
+      {
+        "channels.id": id,
+      },
+      {
+        $set: {
+          "channels.$.name": name,
+        },
+      }
+    )
+    ctx.helper.success({ ctx, res: { name } })
+  }
+
+  async deleteChannel() {
+    const { ctx } = this
+    const { id } = ctx.params
+    const work = await ctx.model.Work.findOneAndUpdate(
+      {
+        "channels.id": id,
+      },
+      {
+        $pull: {
+          channels: {
+            id,
+          },
+        },
+      },
+      {
+        new: true,
+      }
+    )
+    if (!work) {
+      return ctx.helper.error({ ctx, errorType: "workNotFound" })
+    }
+    return ctx.helper.success({ ctx, res: work })
   }
 }

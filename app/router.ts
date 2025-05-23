@@ -27,4 +27,9 @@ export default (app: Application) => {
 
   // ssr
   router.get("/pages/:idAndUuid", controller.utils.renderH5Page)
+
+  router.post("/channel", controller.work.createChannel)
+  router.get("/channel/getWorkChannels/:id", controller.work.getWorkChannel)
+  router.patch("/channel/updateName/:id", controller.work.updateChannelName)
+  router.delete("/channel/:id", controller.work.deleteChannel)
 }

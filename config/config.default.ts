@@ -52,6 +52,7 @@ export default (appInfo: EggAppInfo) => {
       "/api/works",
       "/api/utils/upload",
       "/api/utils/mutipleUpload",
+      "/api/channel",
     ],
   }
   config.cors = {
