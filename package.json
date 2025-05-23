@@ -27,6 +27,7 @@
     "upload": "node webpack/uploadToOSS.js"
   },
   "dependencies": {
+    "@casl/ability": "^5.4.3",
     "@eggjs/scripts": "^4.0.0",
     "@eggjs/tegg": "^3.5.2",
     "@eggjs/tegg-aop-plugin": "^3.5.2",
@@ -70,10 +71,10 @@
     "egg-ts-helper": "^2.1.1",
     "eslint": "8",
     "eslint-config-egg": "14",
-    "typescript": "5",
-    "mini-css-extract-plugin": "^2.9.2",
     "filemanager-webpack-plugin": "^8.0.0",
     "html-webpack-plugin": "^5.6.3",
+    "mini-css-extract-plugin": "^2.9.2",
+    "typescript": "5",
     "webpack": "^5.99.9",
     "webpack-cli": "^6.0.1"
   },
