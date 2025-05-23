@@ -33,6 +33,7 @@ async function run() {
       return Location
     })
   )
+  console.log("上传成功", res)
 }
 
 run()
