@@ -23,6 +23,7 @@ const channelRules = {
 
 export default class WorkController extends Controller {
   @validateInput(wortCreateRules, "workValidateFail")
+  @checkPermission("Work", "workNoPermissionFail")
   async createWork() {
     const { ctx, service } = this
     const workData = await service.work.createEmptyWork(ctx.request.body)
@@ -90,7 +91,7 @@ export default class WorkController extends Controller {
   }
 
   // 发布
-  @checkPermission("Work", "workNoPermissionFail")
+  @checkPermission("Work", "workNoPermissionFail", { action: "publish" })
   async publish(isTemplate: boolean) {
     const { ctx, service } = this
     const { id } = ctx.params
@@ -108,6 +109,16 @@ export default class WorkController extends Controller {
     await this.publish(true)
   }
 
+  @checkPermission(
+    { casl: "Channel", mongoose: "Work" },
+    "workNoPermissionFail",
+    {
+      value: {
+        type: "body",
+        valueKey: "workId",
+      },
+    }
+  )
   @validateInput(channelRules, "workValidateFail")
   async createChannel() {
     const { ctx } = this
@@ -128,6 +139,10 @@ export default class WorkController extends Controller {
     ctx.helper.success({ ctx, res: newChannel })
   }
 
+  @checkPermission(
+    { casl: "Channel", mongoose: "Work" },
+    "workNoPermissionFail"
+  )
   async getWorkChannel() {
     const { ctx } = this
     const { id } = ctx.params
@@ -139,6 +154,13 @@ export default class WorkController extends Controller {
     ctx.helper.success({ ctx, res: { count: channels.length, list: channels } })
   }
 
+  @checkPermission(
+    { casl: "Channel", mongoose: "Work" },
+    "workNoPermissionFail",
+    {
+      key: "channels.id",
+    }
+  )
   async updateChannelName() {
     const { ctx } = this
     const { id } = ctx.params
@@ -156,6 +178,13 @@ export default class WorkController extends Controller {
     ctx.helper.success({ ctx, res: { name } })
   }
 
+  @checkPermission(
+    { casl: "Channel", mongoose: "Work" },
+    "workNoPermissionFail",
+    {
+      key: "channels.id",
+    }
+  )
   async deleteChannel() {
     const { ctx } = this
     const { id } = ctx.params
