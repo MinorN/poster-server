@@ -1,0 +1,31 @@
+version: '3'
+services:
+  poster-mongo:
+    image: mongo:latest
+    container_name: poster-mongo
+    volumes:
+      - '.docker-volumes/mongo/data:/data/db'
+      - '$PWD/mongo-entrypoint/:/docker-enrtypoint-initdb.d/'
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+  poster-redis:
+    image: redis:latest
+    container_name: poster-redis
+    volumes:
+      - '.docker-volumes/redis/data:/data'
+    ports:
+      - 6379:6379
+  poster-backend:
+    depends_on:
+      - poster-mongo
+      - poster-redis
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: poster-backend
+    container_name: poster-backend
+    ports:
+      - 7001:7001
