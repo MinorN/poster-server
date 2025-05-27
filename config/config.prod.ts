@@ -22,5 +22,15 @@ export default () => {
 
   config.jwtExpiration = "1 days"
 
+  config.security = {
+    domainWhiteList: ["https://minorn.cn", "https://www.minron.cn"],
+  }
+
+  config.giteeOauthConfig = {
+    redirect_url: "https://api.minorn.cn/api/users/passport/gitee/callback",
+  }
+
+  config.H5BaseURL = "https://h5.minorn.cn"
+
   return config
 }

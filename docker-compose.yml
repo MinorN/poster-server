@@ -13,8 +13,8 @@ services:
   poster-redis:
     image: redis:latest
     container_name: poster-redis
-    volumes:
-      - '.docker-volumes/redis/data:/data'
+    command: >
+      -- requirepass ${REDIS_PASSWORD}
     ports:
       - 6379:6379
     env_file:
