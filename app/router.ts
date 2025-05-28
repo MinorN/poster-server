@@ -2,6 +2,7 @@ import { Application } from "egg"
 
 export default (app: Application) => {
   const { controller, router } = app
+  router.get("/ping", controller.home.index)
   router.prefix("/api")
 
   router.post("/users/create", controller.user.createByEmail)

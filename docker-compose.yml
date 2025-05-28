@@ -5,7 +5,7 @@ services:
     container_name: poster-mongo
     volumes:
       - '.docker-volumes/mongo/data:/data/db'
-      - '$PWD/mongo-entrypoint/:/docker-enrtypoint-initdb.d/'
+      - '$PWD/mongo-entrypoint/:/docker-entrypoint-initdb.d/'
     ports:
       - 27017:27017
     env_file:
@@ -14,7 +14,7 @@ services:
     image: redis:latest
     container_name: poster-redis
     command: >
-      -- requirepass ${REDIS_PASSWORD}
+      --requirepass ${REDIS_PASSWORD}
     ports:
       - 6379:6379
     env_file:

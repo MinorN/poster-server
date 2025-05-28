@@ -8,6 +8,7 @@ export default () => {
     options: {
       user: process.env.MONGO_DB_USERNAME,
       pass: process.env.MONGO_DB_PASSWORD,
+      useUnifiedTopology: true,
     },
   }
 
@@ -16,21 +17,20 @@ export default () => {
       port: 6379,
       host: "poster-redis",
       password: process.env.REDIS_PASSWORD,
-      db: 0,
     },
   }
 
-  config.jwtExpiration = "1 days"
+  // config.jwtExpiration = "1 days"
 
-  config.security = {
-    domainWhiteList: ["https://minorn.cn", "https://www.minron.cn"],
-  }
+  // config.security = {
+  //   domainWhiteList: ["https://minorn.cn", "https://www.minron.cn"],
+  // }
 
-  config.giteeOauthConfig = {
-    redirect_url: "https://api.minorn.cn/api/users/passport/gitee/callback",
-  }
+  // config.giteeOauthConfig = {
+  //   redirect_url: "https://api.minorn.cn/api/users/passport/gitee/callback",
+  // }
 
-  config.H5BaseURL = "https://h5.minorn.cn"
+  // config.H5BaseURL = "https://h5.minorn.cn"
 
   return config
 }

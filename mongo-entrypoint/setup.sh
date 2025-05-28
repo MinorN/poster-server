@@ -1,8 +1,6 @@
 #!/bin/bash
-
 set -e
-
-mongo <<EOF
+mongosh <<EOF
 use admin
 db.auth("$MONGO_INITDB_ROOT_USERNAME", "$MONGO_INITDB_ROOT_PASSWORD")
 use poster
@@ -13,5 +11,4 @@ db.createUser({
     { role: "readWrite", db: "poster" }
   ]
 })
-
 EOF
