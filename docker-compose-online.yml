@@ -20,7 +20,7 @@ services:
     env_file:
       - .env
   poster-backend:
-    image: ccr.ccs.tencentyun.com/minorn/poster:0.0.1
+    image: ccr.ccs.tencentyun.com/minorn/poster:{{tag}}
     container_name: poster-backend
     ports:
       - 7001:7001

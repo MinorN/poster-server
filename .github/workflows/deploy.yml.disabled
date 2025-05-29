@@ -1,0 +1,58 @@
+name: Deploy app to server
+on: [push]
+jobs:
+  deplay-and-restart:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # 创建 .env 文件
+      - name: Create .env file
+        run: |
+          touch .env
+          echo JWT_SECRET=${{secrets.JWT_SECRET}} >> .env
+          echo GITEE_CID=${{secrets.GITEE_CID}} >> .env
+          echo GITEE_SECRET=${{secrets.GITEE_SECRET}} >> .env
+          echo COS_BUCKET=${{secrets.COS_BUCKET}} >> .env
+          echo COS_SECRET_ID=${{secrets.COS_SECRET_ID}} >> .env
+          echo COS_SECRET_KEY=${{secrets.COS_SECRET_KEY}} >> .env
+          echo COS_REGION=${{secrets.COS_REGION}} >> .env
+          echo COS_PATH=${{secrets.COS_PATH}} >> .env
+          echo MONGO_INITDB_ROOT_USERNAME=${{secrets.MONGO_INITDB_ROOT_USERNAME}} >> .env
+          echo MONGO_INITDB_ROOT_PASSWORD=${{secrets.MONGO_INITDB_ROOT_PASSWORD}} >> .env
+          echo MONGO_DB_USERNAME=${{secrets.MONGO_DB_USERNAME}} >> .env
+          echo MONGO_DB_PASSWORD=${{secrets.MONGO_DB_PASSWORD}} >> .env
+          echo REDIS_PASSWORD=${{secrets.REDIS_PASSWORD}} >> .env
+          echo TENCENT_USERNAME=${{secrets.TENCENT_USERNAME}} >> .env
+          echo TENCENT_PASSWORD=${{secrets.TENCENT_PASSWORD}} >> .env
+      # copy env
+      - name: Copy .env to folder
+        run: |
+          mkdir poster-backend
+          cp .env docker-compose-online.yml poster-backend
+          cp -r mongo-entrypoint poster-backend
+      # 把copy的文件放入服务器
+      - name: Copy poster-foler scp
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: 'poster-backend'
+          target: '~'
+      - name: ssh login and restart service
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          scrip_stop: true
+          script: |
+            docker login ccr.ccs.tencentyun.com --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+            cd ~/poster-backend
+            docker-compose -f docker-compose-online.yml down
+            docker-compose -f docker-compose-online.yml up -d
+            rm -rf .env
+            docker logout ccr.ccs.tencentyun.com
+
+            
+

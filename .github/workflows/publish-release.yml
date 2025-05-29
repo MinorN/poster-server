@@ -1,11 +1,14 @@
-name: Deploy app to server
-on: [push]
+name: 自动部署到腾讯云服务器
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # 监听版本标签的推送事件
 jobs:
-  deplay-and-restart:
+  publish-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # 创建 .env 文件
+      # 创建 env 文件
       - name: Create .env file
         run: |
           touch .env
@@ -24,9 +27,28 @@ jobs:
           echo REDIS_PASSWORD=${{secrets.REDIS_PASSWORD}} >> .env
           echo TENCENT_USERNAME=${{secrets.TENCENT_USERNAME}} >> .env
           echo TENCENT_PASSWORD=${{secrets.TENCENT_PASSWORD}} >> .env
-          cat .env
-      # copy env
-      - name: Copy .env to folder
+      # 登录腾讯云镜像
+      - name: Login to tencent container
+        uses: docker/login-action@v3
+        with:
+          registry: ccr.ccs.tencentyun.com
+          username: ${{ secrets.TENCENT_USERNAME }}
+          password: ${{ secrets.TENCENT_PASSWORD }}
+      # 使用 github tag 进行 build
+      - name: Build image for docker
+        run: docker build --tag ccr.ccs.tencentyun.com/minorn/poster:{{github.ref_name}} .
+      # 推送镜像到腾讯云
+      - name: Push image to tencent container
+        run: docker push ccr.ccs.tencentyun.com/minorn/poster:{{github.ref_name}}
+      # 替换 tag 标签
+      - name: Replace tag in docker-compose-online.yml
+        uses: jacobtomlinson/gha-find-replace@v2
+        with:
+          find: '{{tag}}'
+          replace: ${{ github.ref_name }}
+          include: docker-compose-online.yml
+      # copy 文件夹
+      - name: Copy file to server
         run: |
           mkdir poster-backend
           cp .env docker-compose-online.yml poster-backend
@@ -40,6 +62,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           source: 'poster-backend'
           target: '~'
+      # 重启服务
       - name: ssh login and restart service
         uses: appleboy/ssh-action@master
         with:
@@ -54,6 +77,4 @@ jobs:
             docker-compose -f docker-compose-online.yml up -d
             rm -rf .env
             docker logout ccr.ccs.tencentyun.com
-
-            
-
+        
