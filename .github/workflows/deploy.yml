@@ -24,6 +24,7 @@ jobs:
           echo REDIS_PASSWORD=${{secrets.REDIS_PASSWORD}} >> .env
           echo TENCENT_USERNAME=${{secrets.TENCENT_USERNAME}} >> .env
           echo TENCENT_PASSWORD=${{secrets.TENCENT_PASSWORD}} >> .env
+          cat .env
       # copy env
       - name: Copy .env to folder
         run: |
