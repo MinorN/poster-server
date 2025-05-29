@@ -1,0 +1,25 @@
+name: build image and push to tx
+on: [push]
+jobs:
+  build-and-push:
+   runs-on: ubuntu-latest
+   steps:
+     # checkout 
+      - uses: actions/checkout@v4
+      - run: touch .env
+      - run: echo COS_SECRET_ID=${{secrets.COS_SECRET_ID}} >> .env
+      - run: echo COS_SECRET_KEY=${{secrets.COS_SECRET_KEY}} >> .env
+      - run: echo COS_BUCKET=${{secrets.COS_BUCKET}} >> .env
+      - run: echo COS_REGION=${{secrets.COS_REGION}} >> .env
+      - name: Login to tencent container
+        uses: docker/login-action@v3
+        with:
+          registry: ccr.ccs.tencentyun.com
+          username: ${{ secrets.TENCENT_USERNAME }}
+          password: ${{ secrets.TENCENT_PASSWORD }}
+      # build
+      - name: build image
+        run: docker build --tag ccr.ccs.tencentyun.com/minorn/poster:0.0.2 .
+      - name: push image
+        run: docker push ccr.ccs.tencentyun.com/minorn/poster:0.0.2
+    
