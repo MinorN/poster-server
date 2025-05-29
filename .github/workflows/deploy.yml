@@ -30,7 +30,7 @@ jobs:
           mkdir poster-backend
           cp .env docker-compose-online.yml poster-backend
           cp -r mongo-entrypoint poster-backend
-      # 登录 ssh
+      # 把copy的文件放入服务器
       - name: Copy poster-foler scp
         uses: appleboy/scp-action@master
         with:
@@ -39,4 +39,20 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           source: 'poster-backend'
           target: '~'
+      - name: ssh login and restart service
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          scrip_stop: true
+          script: |
+            docker login ccr.ccs.tencentyun.com --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+            cd ~/poster-backend
+            docker-compose -f docker-compose-online.yml down
+            docker-compose -f docker-compose-online.yml up -d
+            rm -rf .env
+            docker logout ccr.ccs.tencentyun.com
+
+            
 
